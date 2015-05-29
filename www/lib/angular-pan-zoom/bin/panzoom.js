@@ -155,6 +155,8 @@ function ($document, PanZoomService) {
                         };
 
                         var changeZoomLevel = function (newZoomLevel, clickPoint, duration) {
+                            console.log("$scope.zoomAnimation: " + $scope.zoomAnimation);
+
                             if ($scope.zoomAnimation) {
                                 $scope.base.zoomLevel = $scope.model.zoomLevel;
                                 $scope.base.pan.x = $scope.model.pan.x;
@@ -167,12 +169,18 @@ function ($document, PanZoomService) {
                             newZoomLevel = Math.max(0, newZoomLevel);
                             newZoomLevel = Math.min($scope.config.zoomLevels - 1, newZoomLevel);
 
+                            console.log("newZoomLevel: ", newZoomLevel);
+
                             var deltaZoomLevel = newZoomLevel - $scope.base.zoomLevel;
                             if (!deltaZoomLevel) {
                                 return;
                             }
 
+                            console.log("deltaZoomLevel: " + deltaZoomLevel);
+
                             duration = duration || $scope.config.zoomStepDuration;
+
+                            console.log("duration: " + duration);
 
                             //
                             // Let p be the vector to the clicked point in view coords and let p' be the same point in model coords. Let s be a scale factor
@@ -447,10 +455,20 @@ function ($document, PanZoomService) {
                                     sign = -sign;
                                 }
 
+                                console.log(frameElement);
+                                console.log("left: ", frameElement[0].offsetLeft);
+                                console.log("top: ", frameElement[0].offsetTop);
+                                console.log("pageX: " + $event.originalEvent.pageX);
+                                console.log("pageY: " + $event.originalEvent.pageY);
+
                                 var clickPoint = {
-                                    x: $event.originalEvent.pageX - frameElement.offset().left,
-                                    y: $event.originalEvent.pageY - frameElement.offset().top
+                                    // x: $event.originalEvent.pageX - frameElement.offset().left,
+                                    // y: $event.originalEvent.pageY - frameElement.offset().top
+                                    x: $event.originalEvent.pageX - frameElement[0].offsetLeft,
+                                    y: $event.originalEvent.pageY - frameElement[0].offsetTop
                                 };
+
+                                console.log("sign: " + sign);
 
                                 if (sign < 0) {
                                     zoomIn(clickPoint);
